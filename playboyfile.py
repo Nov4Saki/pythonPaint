@@ -22,7 +22,7 @@ class Canvas(QWidget):
         self.update()
 
     def _create_blank_image(self):
-        image = self._image if self._image else None
+        image = None
         if image is None or image.size() != self.size():
             if self.size().width() > 0 and self.size().height() > 0:
                 image = QImage(self.size(), QImage.Format_RGB32)
@@ -130,7 +130,7 @@ class PythonPaint(QMainWindow):
     def update_brush_size(self, size):
         self.canvas.brush_size = size
         self.brush_slider.setValue(size)
-        self.brush_spin.setValue(size) 
+        self.brush_spin.setValue(size)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
