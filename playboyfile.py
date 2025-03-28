@@ -75,46 +75,52 @@ class PythonPaint(QMainWindow):
         self.setWindowTitle("PythonPaint")
         self.setGeometry(100, 100, 800, 600)
 
-        # Create central widget and layout
+        # Create central widget and main layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        layout = QVBoxLayout(central_widget)
+        main_layout = QHBoxLayout(central_widget)  # Horizontal layout
 
         # Create canvas
         self.canvas = Canvas()
-        layout.addWidget(self.canvas)
+        main_layout.addWidget(self.canvas)
 
-        # Create controls
-        controls_layout = QHBoxLayout()
+        # Create sidebar widget
+        sidebar = QWidget()
+        sidebar.setFixedWidth(200)  # Set the width of the sidebar
+        sidebar_layout = QVBoxLayout(sidebar)
 
         # Color button
         self.color_btn = QPushButton("Color")
         self.color_btn.clicked.connect(self.choose_color)
-        controls_layout.addWidget(self.color_btn)
+        sidebar_layout.addWidget(self.color_btn)
 
-        # Brush size slider
-        controls_layout.addWidget(QLabel("Brush Size:"))
-        self.brush_slider = QSlider(Qt.Horizontal)
+        # Brush size controls
+        sidebar_layout.addWidget(QLabel("Brush Size:"))
+
+        self.brush_slider = QSlider(Qt.Horizontal)  # Vertical slider
         self.brush_slider.setMinimum(1)
         self.brush_slider.setMaximum(50)
         self.brush_slider.setValue(5)
         self.brush_slider.valueChanged.connect(self.update_brush_size)
-        controls_layout.addWidget(self.brush_slider)
+        sidebar_layout.addWidget(self.brush_slider)
 
-        # Brush size spin box
         self.brush_spin = QSpinBox()
         self.brush_spin.setMinimum(1)
         self.brush_spin.setMaximum(50)
         self.brush_spin.setValue(5)
         self.brush_spin.valueChanged.connect(self.update_brush_size)
-        controls_layout.addWidget(self.brush_spin)
+        sidebar_layout.addWidget(self.brush_spin)
 
         # Clear button
         clear_btn = QPushButton("Clear")
         clear_btn.clicked.connect(self.canvas.clear_canvas)
-        controls_layout.addWidget(clear_btn)
+        sidebar_layout.addWidget(clear_btn)
 
-        layout.addLayout(controls_layout)
+        # Add stretch to push elements to the top
+        sidebar_layout.addStretch()
+
+        # Add sidebar to the main layout
+        main_layout.addWidget(sidebar)
 
     def choose_color(self):
         color = QColorDialog.getColor()
@@ -124,11 +130,12 @@ class PythonPaint(QMainWindow):
     def update_brush_size(self, size):
         self.canvas.brush_size = size
         self.brush_slider.setValue(size)
-        self.brush_spin.setValue(size)
-
+        self.brush_spin.setValue(size) 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = PythonPaint()
     window.show()
     sys.exit(app.exec_())
+
+
